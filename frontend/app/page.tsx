@@ -74,7 +74,7 @@ export default function Home() {
     const interval = setInterval(async () => {
       try {
         const res = await fetch(
-          `http://localhost:5000/api/rides/${activeRideId}`,
+          `${process.env.NEXT_PUBLIC_API_URL!}/api/rides/${activeRideId}`,
         );
         const data = await res.json();
 
@@ -93,7 +93,7 @@ export default function Home() {
           ) {
             try {
               const profileRes = await fetch(
-                `http://localhost:5000/api/driver/${data.driver_id}/profile`,
+                `${process.env.NEXT_PUBLIC_API_URL!}/api/driver/${data.driver_id}/profile`,
               );
               if (profileRes.ok) {
                 const profileData = await profileRes.json();
@@ -122,7 +122,7 @@ export default function Home() {
       if (!user || view !== "history") return;
       try {
         const res = await fetch(
-          `http://localhost:5000/api/rider/${user.id}/history`,
+          `${process.env.NEXT_PUBLIC_API_URL!}/api/rider/${user.id}/history`,
         );
         const data = await res.json();
         setRideHistory(data);
@@ -152,24 +152,27 @@ export default function Home() {
     );
 
     try {
-      const response = await fetch("http://localhost:5000/api/rides", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          rider_id: user.id,
-          rider_name: user.fullName || user.firstName || "Passenger",
-          rider_image_url: user.imageUrl || "",
-          pickup_location: pickup.address || pickup.name,
-          dropoff_location: dropoff.address || dropoff.name,
-          pickup_lat: pickup.lat,
-          pickup_lon: pickup.lon,
-          dropoff_lat: dropoff.lat,
-          dropoff_lon: dropoff.lon,
-          fare: parseFloat(calculatedFare),
-          distance_km: parseFloat(distance),
-          vehicle_type: selectedRide,
-        }),
-      });
+      const response = await fetch(
+        "${process.env.NEXT_PUBLIC_API_URL!}/api/rides",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            rider_id: user.id,
+            rider_name: user.fullName || user.firstName || "Passenger",
+            rider_image_url: user.imageUrl || "",
+            pickup_location: pickup.address || pickup.name,
+            dropoff_location: dropoff.address || dropoff.name,
+            pickup_lat: pickup.lat,
+            pickup_lon: pickup.lon,
+            dropoff_lat: dropoff.lat,
+            dropoff_lon: dropoff.lon,
+            fare: parseFloat(calculatedFare),
+            distance_km: parseFloat(distance),
+            vehicle_type: selectedRide,
+          }),
+        },
+      );
       const data = await response.json();
       if (response.ok) {
         setActiveRideId(data.ride.id);
@@ -185,7 +188,7 @@ export default function Home() {
     if (!activeRideId) return;
     try {
       await fetch(
-        `http://localhost:5000/api/rides/${activeRideId}/cancel-by-rider`,
+        `${process.env.NEXT_PUBLIC_API_URL!}/api/rides/${activeRideId}/cancel-by-rider`,
         { method: "PUT" },
       );
       handleResetFlow();
@@ -198,11 +201,14 @@ export default function Home() {
     if (!activeRideId) return;
     setIsProcessing(true);
     try {
-      await fetch(`http://localhost:5000/api/rides/${activeRideId}/pay`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ payment_method: method }),
-      });
+      await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL!}/api/rides/${activeRideId}/pay`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ payment_method: method }),
+        },
+      );
       setPaymentStep("done");
     } catch (error) {
       console.error(error);
@@ -214,7 +220,7 @@ export default function Home() {
     setPaymentStep("card");
     try {
       const res = await fetch(
-        "http://localhost:5000/api/create-payment-intent",
+        "${process.env.NEXT_PUBLIC_API_URL!}/api/create-payment-intent",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -231,11 +237,14 @@ export default function Home() {
   const handleSubmitReview = async () => {
     if (!activeRideId) return;
     try {
-      await fetch(`http://localhost:5000/api/rides/${activeRideId}/rate`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ rating: rating, review: reviewText }),
-      });
+      await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL!}/api/rides/${activeRideId}/rate`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ rating: rating, review: reviewText }),
+        },
+      );
       handleResetFlow();
     } catch (error) {
       console.error(error);
@@ -342,7 +351,7 @@ export default function Home() {
     setEmailingRideId(ride.id);
     try {
       const res = await fetch(
-        `http://localhost:5000/api/rides/${ride.id}/email-receipt`,
+        `${process.env.NEXT_PUBLIC_API_URL!}/api/rides/${ride.id}/email-receipt`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
