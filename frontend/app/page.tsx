@@ -74,7 +74,7 @@ export default function Home() {
     const interval = setInterval(async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL!}/api/rides/${activeRideId}`,
+          process.env.NEXT_PUBLIC_API_URL + "/api/rides/" + activeRideId
         );
         const data = await res.json();
 
@@ -93,7 +93,7 @@ export default function Home() {
           ) {
             try {
               const profileRes = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL!}/api/driver/${data.driver_id}/profile`,
+                process.env.NEXT_PUBLIC_API_URL + "/api/driver/" + data.driver_id + "/profile"
               );
               if (profileRes.ok) {
                 const profileData = await profileRes.json();
@@ -122,7 +122,7 @@ export default function Home() {
       if (!user || view !== "history") return;
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL!}/api/rider/${user.id}/history`,
+          process.env.NEXT_PUBLIC_API_URL + "/api/rider/" + user.id + "/history"
         );
         const data = await res.json();
         setRideHistory(data);
@@ -153,7 +153,7 @@ export default function Home() {
 
     try {
       const response = await fetch(
-        "${process.env.NEXT_PUBLIC_API_URL!}/api/rides",
+        process.env.NEXT_PUBLIC_API_URL + "/api/rides",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -188,7 +188,7 @@ export default function Home() {
     if (!activeRideId) return;
     try {
       await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL!}/api/rides/${activeRideId}/cancel-by-rider`,
+        process.env.NEXT_PUBLIC_API_URL + "/api/rides/" + activeRideId + "/cancel-by-rider",
         { method: "PUT" },
       );
       handleResetFlow();
@@ -202,7 +202,7 @@ export default function Home() {
     setIsProcessing(true);
     try {
       await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL!}/api/rides/${activeRideId}/pay`,
+        process.env.NEXT_PUBLIC_API_URL + "/api/rides/" + activeRideId + "/pay",
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -220,7 +220,7 @@ export default function Home() {
     setPaymentStep("card");
     try {
       const res = await fetch(
-        "${process.env.NEXT_PUBLIC_API_URL!}/api/create-payment-intent",
+        process.env.NEXT_PUBLIC_API_URL + "/api/create-payment-intent",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -238,7 +238,7 @@ export default function Home() {
     if (!activeRideId) return;
     try {
       await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL!}/api/rides/${activeRideId}/rate`,
+        process.env.NEXT_PUBLIC_API_URL + "/api/rides/" + activeRideId + "/rate",
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -351,7 +351,7 @@ export default function Home() {
     setEmailingRideId(ride.id);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL!}/api/rides/${ride.id}/email-receipt`,
+        process.env.NEXT_PUBLIC_API_URL + "/api/rides/" + ride.id + "/email-receipt",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -646,7 +646,6 @@ export default function Home() {
                           </span>
                         </div>
 
-                        {/* NEW: Receipt Action Buttons */}
                         {ride.status === "completed" && (
                           <div className="flex gap-2 pt-3 border-t border-gray-100">
                             <button

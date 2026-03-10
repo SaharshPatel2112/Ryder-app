@@ -53,7 +53,9 @@ export default function DriverDashboard() {
   const fetchData = async () => {
     if (!user) return;
     try {
-      const res = await fetch("${process.env.NEXT_PUBLIC_API_URL!}/api/rides/requested");
+      const res = await fetch(
+        process.env.NEXT_PUBLIC_API_URL + "/api/rides/requested",
+      );
       if (res.ok) {
         const allRides = await res.json();
         setAvailableRides(
@@ -62,7 +64,7 @@ export default function DriverDashboard() {
       }
 
       const resStats = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL!}/api/driver/${user.id}/stats`,
+        process.env.NEXT_PUBLIC_API_URL + "/api/driver/" + user.id + "/stats",
       );
       if (resStats.ok) {
         const dataStats = await resStats.json();
@@ -70,7 +72,7 @@ export default function DriverDashboard() {
       }
 
       const resHistory = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL!}/api/driver/${user.id}/history`,
+        process.env.NEXT_PUBLIC_API_URL + "/api/driver/" + user.id + "/history",
       );
       if (resHistory.ok) {
         const dataHistory = await resHistory.json();
@@ -78,7 +80,7 @@ export default function DriverDashboard() {
       }
 
       const resProfile = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL!}/api/driver/${user.id}/profile`,
+        process.env.NEXT_PUBLIC_API_URL + "/api/driver/" + user.id + "/profile",
       );
       if (resProfile.ok) {
         const dataProfile = await resProfile.json();
@@ -87,7 +89,7 @@ export default function DriverDashboard() {
 
       if (myActiveRide) {
         const rideCheck = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL!}/api/rides/${myActiveRide.id}`,
+          process.env.NEXT_PUBLIC_API_URL + "/api/rides/" + myActiveRide.id,
         );
         if (rideCheck.ok) {
           const rideData = await rideCheck.json();
@@ -112,7 +114,7 @@ export default function DriverDashboard() {
     if (!user) return;
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL!}/api/rides/${ride.id}/accept`,
+        process.env.NEXT_PUBLIC_API_URL + "/api/rides/" + ride.id + "/accept",
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -135,7 +137,7 @@ export default function DriverDashboard() {
   const handleConfirmPickup = async (rideId: string) => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL!}/api/rides/${rideId}/pickup`,
+        process.env.NEXT_PUBLIC_API_URL + "/api/rides/" + rideId + "/pickup",
         { method: "PUT" },
       );
       if (res.ok) {
@@ -149,7 +151,7 @@ export default function DriverDashboard() {
   const handleCompleteRide = async (rideId: string) => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL!}/api/rides/${rideId}/complete`,
+        process.env.NEXT_PUBLIC_API_URL + "/api/rides/" + rideId + "/complete",
         { method: "PUT" },
       );
       if (res.ok) {
@@ -170,7 +172,10 @@ export default function DriverDashboard() {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL!}/api/rides/${rideId}/cancel-by-driver`,
+        process.env.NEXT_PUBLIC_API_URL +
+          "/api/rides/" +
+          rideId +
+          "/cancel-by-driver",
         { method: "PUT" },
       );
       if (res.ok) {
@@ -269,7 +274,10 @@ export default function DriverDashboard() {
     setEmailingRideId(ride.id);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL!}/api/rides/${ride.id}/email-receipt`,
+        process.env.NEXT_PUBLIC_API_URL +
+          "/api/rides/" +
+          ride.id +
+          "/email-receipt",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
